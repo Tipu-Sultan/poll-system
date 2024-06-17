@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Typography, Button, Card, CardContent, CardActions } from '@mui/material';
+import { Grid, Typography, Button, Card, CardContent, CardActions, CircularProgress } from '@mui/material';
 import pollService from '../services/pollService';
 
 const Dashboard = () => {
@@ -31,7 +31,6 @@ const Dashboard = () => {
     const handleDelete = async (pollId) => {
         try {
             await pollService.deletePoll(pollId);
-            
             setPolls(prevPolls => prevPolls.filter(poll => poll.id !== pollId));
             alert('Poll deleted');
         } catch (err) {
@@ -39,8 +38,17 @@ const Dashboard = () => {
         }
     };
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </div>
+        );
+    }
+
+    if (error) {
+        return <p>Error: {error}</p>;
+    }
 
     return (
         <div className="container mx-auto mt-5">
@@ -49,7 +57,9 @@ const Dashboard = () => {
             </Typography>
             <Grid container spacing={3}>
                 {polls.length === 0 ? (
-                    <Typography variant="body1">No polls available</Typography>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100%' }}>
+                        <Typography variant="body1">No polls available</Typography>
+                    </div>
                 ) : (
                     polls.map(poll => (
                         <Grid item key={poll.id} xs={12} sm={6} md={4} lg={3}>
@@ -67,7 +77,7 @@ const Dashboard = () => {
                                             const votePercentage = totalVotes > 0 ? (option.votes / totalVotes) * 100 : 0;
                                             const buttonStyle = user.role === 'Institute'
                                                 ? {
-                                                    background: `linear-gradient(90deg, #3f51b5 ${user.role === 'Institute'&&votePercentage}%, #ddd ${user.role === 'Institute'&&votePercentage}%)`,
+                                                    background: `linear-gradient(90deg, #3f51b5 ${user.role === 'Institute' && votePercentage}%, #ddd ${user.role === 'Institute' && votePercentage}%)`,
                                                     color: 'black',
                                                     marginBottom: '8px',
                                                     display: 'block',
@@ -88,7 +98,7 @@ const Dashboard = () => {
                                                     style={buttonStyle}
                                                     fullWidth
                                                 >
-                                                    {option.optionText} {user.role === 'Institute'&&(`(${option.votes})votes`)}
+                                                    {option.optionText} {user.role === 'Institute' && `(${option.votes}) votes`}
                                                 </Button>
                                             );
                                         })}
@@ -110,7 +120,7 @@ const Dashboard = () => {
                                     <Button
                                         variant="contained"
                                         color="info"
-                                        onClick={() => window.location.href=`/polls/${poll.role}/${poll.id}`}
+                                        onClick={() => window.location.href = `/polls/${poll.role}/${poll.id}`}
                                         fullWidth
                                     >
                                         View Poll

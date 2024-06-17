@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Grid, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { TextField, Button, Typography, Container, Grid, FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
 import authService from '../../services/authService';
 
 const Register = () => {
@@ -10,6 +10,7 @@ const Register = () => {
         role: '',
         password: ''
     });
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
@@ -17,11 +18,14 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setLoading(true);
         authService.register(user)
             .then(() => {
+                setLoading(false);
                 alert('User registered');
             })
             .catch(err => {
+                setLoading(false);
                 console.error(err);
             });
     };
@@ -107,8 +111,9 @@ const Register = () => {
                             color="primary"
                             fullWidth
                             type="submit"
+                            disabled={loading}
                         >
-                            Register
+                            {loading ? <CircularProgress size={24} /> : 'Register'}
                         </Button>
                     </Grid>
                 </Grid>

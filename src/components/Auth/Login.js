@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Grid } from '@mui/material';
+import { TextField, Button, Typography, Container, Grid, CircularProgress } from '@mui/material';
 import authService from '../../services/authService';
 
 const Login = () => {
@@ -7,6 +7,7 @@ const Login = () => {
         email: '',
         password: ''
     });
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
@@ -14,12 +15,15 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setLoading(true);
         authService.login(user)
             .then(() => {
+                setLoading(false);
                 alert('User logged in');
-                window.location.href ='/'
+                window.location.href = '/'
             })
             .catch(err => {
+                setLoading(false);
                 console.error(err);
             });
     };
@@ -63,8 +67,9 @@ const Login = () => {
                             color="primary"
                             fullWidth
                             type="submit"
+                            disabled={loading}
                         >
-                            Log In
+                            {loading ? <CircularProgress size={24} /> : 'Log In'}
                         </Button>
                     </Grid>
                 </Grid>
