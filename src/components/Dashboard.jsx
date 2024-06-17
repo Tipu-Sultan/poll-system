@@ -77,7 +77,7 @@ const Dashboard = () => {
                                             const votePercentage = totalVotes > 0 ? (option.votes / totalVotes) * 100 : 0;
                                             const buttonStyle = user.role === 'Institute'
                                                 ? {
-                                                    background: `linear-gradient(90deg, #3f51b5 ${user.role === 'Institute' && votePercentage}%, #ddd ${user.role === 'Institute' && votePercentage}%)`,
+                                                    background: `linear-gradient(90deg, #3f51 ${user.role === 'Institute' && votePercentage}%, #ddd ${user.role === 'Institute' && votePercentage}%)`,
                                                     color: 'black',
                                                     marginBottom: '8px',
                                                     display: 'block',

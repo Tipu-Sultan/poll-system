@@ -31,7 +31,11 @@ const UserList = () => {
     };
 
     if (isLoading) {
-        return <div className="text-center py-8"><CircularProgress /></div>;
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+                <CircularProgress />
+            </div>
+        );
     }
 
     if (error) {
