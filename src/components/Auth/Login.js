@@ -64,7 +64,7 @@ const Login = () => {
                             fullWidth
                             type="submit"
                         >
-                            Sign In
+                            Log In
                         </Button>
                     </Grid>
                 </Grid>

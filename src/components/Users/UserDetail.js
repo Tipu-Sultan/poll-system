@@ -29,7 +29,6 @@ const UserDetail = () => {
         userService.deleteUser(user.id)
             .then(() => {
                 console.log('User deleted');
-                // Redirect to users list or another appropriate page
                 navigate('/users');
             })
             .catch(error => {

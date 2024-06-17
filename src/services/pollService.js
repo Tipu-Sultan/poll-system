@@ -1,4 +1,3 @@
-// services/pollService.js
 import axios from 'axios';
 
 const API_URL = `${process.env.REACT_APP_API_HOST}/api/polls/`;
@@ -14,7 +13,7 @@ const getPollsByRole = (role,optionId) => {
 const getAllPolls = () => {
     return axios.get(API_URL, { headers: authHeader() })
         .then(response => {
-            return response.data; // Directly return the response data
+            return response.data; 
         })
         .catch(error => {
             throw error;

@@ -31,7 +31,7 @@ const Dashboard = () => {
     const handleDelete = async (pollId) => {
         try {
             await pollService.deletePoll(pollId);
-            // Remove the deleted poll from the state
+            
             setPolls(prevPolls => prevPolls.filter(poll => poll.id !== pollId));
             alert('Poll deleted');
         } catch (err) {
@@ -43,7 +43,7 @@ const Dashboard = () => {
     if (error) return <p>Error: {error}</p>;
 
     return (
-        <div className="container mx-auto">
+        <div className="container mx-auto mt-5">
             <Typography variant="h2" align="center" gutterBottom>
                 Dashboard
             </Typography>
@@ -61,13 +61,38 @@ const Dashboard = () => {
                                     <Typography variant="h6" className="font-bold" gutterBottom>
                                         {poll.question}
                                     </Typography>
-                                    <ul>
-                                        {poll.options.map(option => (
-                                            <li key={option.id}>
-                                                {option.optionText}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                    <div>
+                                        {poll.options.map(option => {
+                                            const totalVotes = poll.options.reduce((acc, opt) => acc + opt.votes, 0);
+                                            const votePercentage = totalVotes > 0 ? (option.votes / totalVotes) * 100 : 0;
+                                            const buttonStyle = user.role === 'Institute'
+                                                ? {
+                                                    background: `linear-gradient(90deg, #3f51b5 ${user.role === 'Institute'&&votePercentage}%, #ddd ${user.role === 'Institute'&&votePercentage}%)`,
+                                                    color: 'black',
+                                                    marginBottom: '8px',
+                                                    display: 'block',
+                                                    textAlign: 'left'
+                                                }
+                                                : {
+                                                    backgroundColor: '#3f51b5',
+                                                    color: 'white',
+                                                    marginBottom: '8px',
+                                                    display: 'block',
+                                                    textAlign: 'left'
+                                                };
+
+                                            return (
+                                                <Button
+                                                    key={option.optionText}
+                                                    variant="contained"
+                                                    style={buttonStyle}
+                                                    fullWidth
+                                                >
+                                                    {option.optionText} {user.role === 'Institute'&&(`(${option.votes})votes`)}
+                                                </Button>
+                                            );
+                                        })}
+                                    </div>
                                 </CardContent>
                                 {user.role === 'Institute' && (
                                     <CardActions>
@@ -81,17 +106,16 @@ const Dashboard = () => {
                                         </Button>
                                     </CardActions>
                                 )}
-                                
-                                    <CardActions>
-                                        <Button
-                                            variant="contained"
-                                            color="info"
-                                            onClick={() => window.location.href=`/polls/${poll.role}/${poll.id}`}
-                                            fullWidth
-                                        >
-                                            View Poll
-                                        </Button>
-                                    </CardActions>
+                                <CardActions>
+                                    <Button
+                                        variant="contained"
+                                        color="info"
+                                        onClick={() => window.location.href=`/polls/${poll.role}/${poll.id}`}
+                                        fullWidth
+                                    >
+                                        View Poll
+                                    </Button>
+                                </CardActions>
                             </Card>
                         </Grid>
                     ))
