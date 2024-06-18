@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { TextField, Button, Typography, Container, Grid, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { TextField, Button, Typography, Container, Grid, FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
 import userService from '../../services/userService';
 
 const Update = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const [user, setUser] = useState({
         name: '',
@@ -30,13 +31,16 @@ const Update = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setLoading(true);
         userService.updateUser(id, user)
             .then(() => {
                 alert('User Updated');
+                setLoading(false);
                 navigate('/users');
             })
             .catch(err => {
                 console.error(err);
+                setLoading(false);
             });
     };
 
@@ -104,13 +108,14 @@ const Update = () => {
                         </FormControl>
                     </Grid>
                     <Grid item xs={12}>
-                        <Button
+                    <Button
                             variant="contained"
                             color="primary"
                             fullWidth
                             type="submit"
+                            disabled={loading}
                         >
-                            Update
+                            {loading ? <CircularProgress size={24} /> : 'Update'}
                         </Button>
                     </Grid>
                 </Grid>

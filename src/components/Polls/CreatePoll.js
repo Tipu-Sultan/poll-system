@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { TextField, Button, Typography, Container, FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
 import pollService from '../../services/pollService';
 
 const CreatePoll = () => {
     const user = JSON.parse(localStorage.getItem('user'));
+    const [loading, setLoading] = useState(false);
+
     const [pollData, setPollData] = useState({
         question: '',
         options: ['', ''],
@@ -29,12 +31,15 @@ const CreatePoll = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setLoading(true);
         pollService.createPoll(pollData)
             .then(response => {
                 alert('Poll created successfully');
+                setLoading(false);
             })
             .catch(error => {
                 console.error('Error creating poll:', error);
+                setLoading(false);
             });
     };
 
@@ -98,8 +103,9 @@ const CreatePoll = () => {
                     color="primary"
                     fullWidth
                     style={{ marginTop: 16 }}
+                    disabled={loading}
                 >
-                    Create Poll
+                    {loading ? <CircularProgress size={24} /> : 'Create Poll'}
                 </Button>
             </form>
         </Container>
